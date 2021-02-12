@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"
+ xmlns:th="http://www.thymeleaf.org"
+ >
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Loan Account Detail</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../../assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="../../assets/images/favicon.ico" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="/fragment/header.html::header"></nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        <nav th:replace="/fragment/sidebar.html::sidebar"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            
+            <div class="row">
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="page-header">
+                      <h3 class="page-title">
+                        <span class="page-title-icon bg-gradient-info text-white mr-2">
+                          <i class="mdi mdi-home"></i>
+                        </span>  Loan Account Detail
+                      </h3>
+                      
+                  
+                    </div>
+                    <br>
+                   <form class="forms-sample">
+                    <div class="row">
+                      
+                        <div class="col-md-6 border-right">
+                          <div class="border-bottom p-2">
+                            <label for="custCo" class="col-md-5">Customer Name</label>
+                            <span class="col-md-2">-</span>
+                            <span id="custCo" class="col-md-5">Daw Su Su</span>
+                          </div>
+                          <div class="border-bottom p-2">
+                            <label for="custCo" class="col-md-5">NRC</label>
+                            <span class="col-md-2">-</span>
+                            <span id="custCo" class="col-md-5">12/KaTaDa(N)123456</span>
+                          </div>
+                          <div class="border-bottom p-2">
+                            <label for="custCo" class="col-md-5">Phone</label>
+                            <span class="col-md-2">-</span>
+                            <span id="custCo" class="col-md-5">09-1234567</span>
+                          </div>
+                          
+                        </div>
+                        <div class="col-md-6 border-right">
+                         <div class="border-bottom p-2">
+                            <label for="custCo" class="col-md-5">Address</label>
+                            <span class="col-md-2">-</span>
+                            <span id="custCo" class="col-md-5">Rangoon</span>
+                          </div>
+                          <div class="border-bottom p-2">
+                            <label for="custCo" class="col-md-5">Account Number</label>
+                            <span class="col-md-2">-</span>
+                            <span id="custCo" class="col-md-5">1102 1111 0000 0001</span>
+                          </div>
+                          <div class="border-bottom p-2">
+                            <label for="custCo" class="col-md-5">Balance</label>
+                            <span class="col-md-2">-</span>
+                            <span id="custCo" class="col-md-5">100000</span>
+                          </div>
+                        </div>
+                       
+                    </form>
+                     
+                   
+                   
+                  </div>
+                  <br><br>
+                  <div class="form-group row">       
+                    <div class="col-sm-12">
+                     
+                       <a href="MFI_LAC_02.html" class="btn btn-gradient-danger mr-2" >CLOSE</a>
+                       <a href="MFI_LAC_02.html" class="btn btn-secondary" >BACK</a>
+                    </div>
+                   
+                  </div>
+                    <br><br>
+                    <div class="form-group">
+                      <form class="form-inline">
+                        <label for="inlineFormInputName2" class="col-sm-2 col-form-label">Start Date</label>
+                        <input type="date" class="form-control mb-2 mr-sm-2" id="inlineFormInputName2" placeholder="start date">
+                        <!-- <div class="input-group mb-2 mr-sm-4">
+                        </div> -->
+                  
+                    <label for="inlineFormInputName2" class="col-sm-2 col-form-label">End Date</label>
+                    <input type="date" class="form-control mb-2 mr-sm-2" id="inlineFormInputGroupUsername2" placeholder="end date">
+                
+                  <div class="input-group mb-2 mr-sm-4">
+                  </div>
+
+                  <button type="submit" class="btn btn-gradient-primary mb-2">Search</button>
+                </form>
+                      <br>
+                      <div class="form-group">
+                        <h4>Transation History</h4>
+                      </div>
+                   
+                     <table class="table table-hover ">
+                        <thead>
+                          <tr>
+                          <th>Transaction Date</th>
+                          <th>Reference Number</th>
+                          <th>Transaction Description</th>
+                          <th>Debit</th>
+                          <th>Credit</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                          <td>10/12/2020</td>
+                          <td>74284500350049184928111</td>
+                          <td>Withdraw</td>
+                          <td>50000</td>
+                          <td></td>
+                        </tr>   
+                        <tr>
+                          <td>15/12/2020</td>
+                          <td>74284500350049184928210</td>
+                          <td>Deposit</td>
+                          <td></td>
+                          <td>100000</td>
+                        </tr>                                                            
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+         
+          <!-- partial -->
+        </div>
+        </div>
+        <!-- main-panel ends -->
+       <footer th:replace="/fragment/footer.html::footer"></footer>
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../assets/js/off-canvas.js"></script>
+    <script src="../../assets/js/hoverable-collapse.js"></script>
+    <script src="../../assets/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="../../assets/js/file-upload.js"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>

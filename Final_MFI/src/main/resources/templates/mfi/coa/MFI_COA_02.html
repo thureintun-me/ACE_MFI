@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"
+  xmlns:th="http://www.thymeleaf.org">
+   <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>COA Search</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="../../assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../assets/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="../../assets/images/favicon.ico" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:../../partials/_navbar.html -->
+      <nav th:replace="/fragment/header.html::header"></nav>
+            <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:../../partials/_sidebar.html -->
+        
+        <nav th:replace="/fragment/sidebar.html::sidebar"></nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            
+            <div class="row">
+              <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="page-header">
+                      <h3 class="page-title">
+                        <span class="page-title-icon bg-gradient-info text-white mr-2">
+                          <i class="mdi mdi-home"></i>
+                        </span> COA Search
+                      </h3>
+                      
+                  
+                    </div>
+                    <div class="form-group">
+                      <div class="input-group" >
+                        <input type="text" class="form-control col-sm-3" placeholder="COA Id" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-sm btn-gradient-primary" type="button">Search</button>
+                        </div>
+                       <!-- <div class="col-sm-2  ">
+                          <a href="MFI_COA_01.html" class="btn btn-gradient-info" style="height: 46px;">Add</a>
+                          
+                          
+                        </div>-->
+                      </div>
+                      
+                     
+                    </div>
+                    
+                    <table class="table table-hover table-responsive">
+                      <thead>
+                        <tr>
+                          <th> COA Id </th>
+                          <th> Bank Id </th>
+                          <th>Gl Type </th>
+                          <th> Account Number </th>
+                          <th> Amount </th>
+                          <th>Create User</th>
+                          <th>Create Date</th>
+                          <th>Update User</th>
+                          <th>Update Date</th> 
+                         
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>01</td>
+                          <td> 002</td>
+                          <td>Capital</td>
+                          <td> 1111 0000 0000 1101 </td>
+                           <td> 100000000 </td>
+                           <td>Admin</td>
+                           <td> May 15, 2015 </td>
+                          <td>Admin</td>
+                          <td> May 15, 2016 </td> 
+                          
+                        </tr>                                                            
+                        <tr>
+                          <td>02</td>
+                          <td> 002</td>
+                          <td>Cash</td>
+                          <td> 1111 0000 0000 1102 </td>
+                           <td> 90000000 </td>
+                           <td>Admin</td>
+                           <td> May 15, 2015 </td>
+                          <td>Admin</td>
+                          <td> Dec 15, 2020 </td> 
+                          
+                        </tr>
+                        <tr>
+                          <td>03</td>
+                          <td> 002</td>
+                          <td>Income</td>
+                          <td> 1111 0000 0000 1103 </td>
+                           <td> 20000000 </td>
+                           <td>Admin</td>
+                           <td> May 15, 2015 </td>
+                          <td>Admin</td>
+                          <td> Dec 15, 2020 </td> 
+                         
+                        </tr>
+                        <tr>
+                          <td>04 </td>
+                          <td> 002</td>
+                          <td>Saving</td>
+                          <td> - </td>
+                           <td> 50000000 </td>
+                           <td>Admin</td>
+                           <td> May 15, 2015 </td>
+                          <td>Admin</td>
+                          <td> Jan 7, 2021 </td> 
+                         
+                        </tr>
+                        <tr>
+                          <td>05 </td>
+                          <td> 002</td>
+                          <td>Current</td>
+                          <td> - </td>
+                           <td> 50000000 </td>
+                           <td>Admin</td>
+                           <td> May 15, 2015 </td>
+                          <td>Admin</td>
+                          <td> Jan 7, 2021 </td> 
+                         
+                        </tr>
+                        <tr>
+                          <td>06 </td>
+                          <td> 002</td>
+                          <td>Loan</td>
+                          <td> - </td>
+                           <td> 50000000 </td>
+                           <td>Admin</td>
+                           <td> May 15, 2015 </td>
+                          <td>Admin</td>
+                          <td> Jan 7, 2021 </td> 
+                         
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+         
+          <!-- content-wrapper ends -->
+          <!-- partial:../../partials/_footer.html -->
+          
+          <!-- partial -->
+        </div>
+	<footer th:replace="/fragment/footer.html::footer"></footer>          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="../../assets/js/off-canvas.js"></script>
+    <script src="../../assets/js/hoverable-collapse.js"></script>
+    <script src="../../assets/js/misc.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="../../assets/js/file-upload.js"></script>
+    <!-- End custom js for this page -->
+  </body>
+</html>
