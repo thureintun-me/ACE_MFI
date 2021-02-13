@@ -52,12 +52,12 @@ public class UserController {
 	@PostMapping("/userRegister")
 	public String userRegister(@ModelAttribute("userBean") Userform user, Model model) {
 		User checkUser = userService.findByEmail(user.getEmail());
-		String email = checkUser.getEmail();
+		
 		if (!user.getConPass().equals(user.getPassword())) {
 			model.addAttribute("user", user);
 			model.addAttribute("role", roleService.selectAll());
 			return "mfi/user/MFI_CUR_01";
-		}else if(user.getEmail().equals(email)) {
+		}else if(checkUser != null) {
 			
 			model.addAttribute("user", user);
 			model.addAttribute("role", roleService.selectAll());

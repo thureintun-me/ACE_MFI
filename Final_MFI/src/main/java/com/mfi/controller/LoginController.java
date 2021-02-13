@@ -31,26 +31,38 @@ public class LoginController {
 	@Autowired
 	 private  PasswordEncoder passwordEncoder;
 
+	@RequestMapping("/")
+	public String home() {
+	Permission p=	perService.findByName("MASTER");
+	if(p == null) {
+		createPermission();
+	}
+		return "redirect:/login";
+	}
 	@RequestMapping("/login")
 	public String login() {
+		
 		User user=userService.findByEmail("master@gmail.com");
 		
-		
+		System.out.println("perService" + perService.findByName("MASTER"));
 		if(user==null) {
 			Role role = new Role();
-			role.setRoleName("MASTER");
+			
 			role.setRolePosition("Checker");
 			roleService.save(role);
 			List<Permission> permission = new ArrayList<Permission>();
-					permission.add(perService.findByName("MASTER"));
+			permission.add(perService.findByName("MASTER"));
 			
 			User master=new User();
 			master.setEmail("master@gmail.com");
 			master.setPassword(passwordEncoder.encode("master"));
 			master.setRole(role);
-			master.setPermission(permission);
+			for(int i=0;i<permission.size();i++) {
+				master.getPermission().add(permission.get(i));
+				userService.save(master);
+			}
 			
-			userService.save(master);
+			
 		}
 		return "MFI_LGN_01";
 	}
@@ -75,56 +87,57 @@ public class LoginController {
 		}
 
 		if (user.getRole().getRolePosition().equals("Checker") || user.getRole().getRolePosition().equals("MASTER") ) {
-			System.out.println("role : " + user.getRole().getRoleName());
-			return "mfi/dashboard/checker_dashboard";
+			
+			return "redirect:/checker";
+			//return "mfi/dashboard/checker_dashboard" ;
 		} else {
-			System.out.println("role : " + user.getRole().getRoleName());
-			return "mfi/dashboard/maker_dashboard";
+			
+			return "redirect:/maker";
 
 		}
 
 	}
 
-	/*
-	 * @RequestMapping("/crPer") public void createPermission() {
-	 * 
-	 * Permission permission11 = new Permission(); permission11.setPerName("MAKER");
-	 * 
-	 * Permission permission10 = new Permission();
-	 * permission10.setPerName("CHECKER");
-	 * 
-	 * 
-	 * Permission permission8 = new Permission(); permission8.setPerName("MASTER");
-	 * 
-	 * 
-	 * 
-	 * 
-	 * Permission permission1 = new Permission(); permission1.setPerName("CRM");
-	 * Permission permission2 = new Permission(); permission2.setPerName("Account");
-	 * Permission permission3 = new Permission(); permission3.setPerName("Reports");
-	 * Permission permission4 = new Permission(); permission4.setPerName("Loan");
-	 * Permission permission5 = new Permission();
-	 * permission5.setPerName("Transaction"); Permission permission6 = new
-	 * Permission(); permission6.setPerName("COA"); Permission permission7 = new
-	 * Permission(); permission7.setPerName("Blacklist"); Permission permission12 =
-	 * new Permission(); permission12.setPerName("Admin");
-	 * 
-	 * perService.createPermission(permission8);
-	 * perService.createPermission(permission11);
-	 * perService.createPermission(permission10);
-	 * perService.createPermission(permission12);
-	 * 
-	 * perService.createPermission(permission1);
-	 * 
-	 * perService.createPermission(permission2);
-	 * perService.createPermission(permission3);
-	 * perService.createPermission(permission4);
-	 * perService.createPermission(permission5);
-	 * perService.createPermission(permission6);
-	 * perService.createPermission(permission7);
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
+	
+	  	 public void createPermission() {
+	  
+	  Permission permission11 = new Permission(); permission11.setPerName("MAKER");
+	  
+	  Permission permission10 = new Permission();
+	  permission10.setPerName("CHECKER");
+	  
+	  
+	  Permission permission8 = new Permission(); permission8.setPerName("MASTER");
+	  
+	  
+	  
+	  
+	  Permission permission1 = new Permission(); permission1.setPerName("CRM");
+	  Permission permission2 = new Permission(); permission2.setPerName("Account");
+	  Permission permission3 = new Permission(); permission3.setPerName("Reports");
+	  Permission permission4 = new Permission(); permission4.setPerName("Loan");
+	  Permission permission5 = new Permission();
+	  permission5.setPerName("Transaction"); Permission permission6 = new
+	  Permission(); permission6.setPerName("COA"); Permission permission7 = new
+	  Permission(); permission7.setPerName("Blacklist"); Permission permission12 =
+	  new Permission(); permission12.setPerName("Admin");
+	  
+	  perService.createPermission(permission8);
+	  perService.createPermission(permission11);
+	  perService.createPermission(permission10);
+	  perService.createPermission(permission12);
+	  
+	  perService.createPermission(permission1);
+	  
+	  perService.createPermission(permission2);
+	  perService.createPermission(permission3);
+	  perService.createPermission(permission4);
+	  perService.createPermission(permission5);
+	  perService.createPermission(permission6);
+	  perService.createPermission(permission7);
+	  
+	  
+	  
+	  }
+	 
 }

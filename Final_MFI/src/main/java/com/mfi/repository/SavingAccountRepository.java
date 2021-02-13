@@ -17,5 +17,8 @@ public interface SavingAccountRepository extends JpaRepository<SavingAccount, St
 	
 	@Query("select s from SavingAccount s where s.createdDate between ?1 and ?2")
 	List<SavingAccount> accountFilter(Date start, Date end);
+	
+	@Query("select s from SavingAccount s where s.savingAccountNumber=?1")
+	SavingAccount getAccountNumber(String accountnUmber);
 
 }

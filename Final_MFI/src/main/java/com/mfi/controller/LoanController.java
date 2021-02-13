@@ -17,7 +17,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,6 +42,7 @@ import com.mfi.service.CurrentAccountService;
 import com.mfi.service.LoanAccountService;
 import com.mfi.service.LoanInfoService;
 import com.mfi.service.LoanScheduleService;
+import com.mfi.service.MyUserDetails;
 import com.mfi.service.SavingAccountService;
 
 @Controller
@@ -326,7 +328,15 @@ public class LoanController {
 			
 //			Current Account Create
 //			Double balance = loanList.getLoanAmount() - 1000;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
+			int userId = currentPrincipalName.getUserId();
+			//LocalDate now = LocalDate.now();
+			Date createdDate = Date.valueOf(now);
+			
 			CurrentAccount current = new CurrentAccount();
+			current.setCreatedUser(userId);
+			current.setCreatedDate(createdDate);
 			current.setCustomer(loanList.getCustomer());
 			current.setAccountStatus(true);
 			current.setBalance(0.0);
@@ -348,6 +358,8 @@ public class LoanController {
 
 //			saving account create 
 			SavingAccount saving = new SavingAccount();
+			saving.setCreatedUser(userId);
+			saving.setCreatedDate(createdDate);
 			saving.setCustomer(loanList.getCustomer());
 			saving.setAccountStatus(true);
 			saving.setBalance(0.0);
@@ -371,6 +383,8 @@ public class LoanController {
 			CurrentAccount currentAccNumber = currentService.getCurrentAccount(loanList.getCustomer().getCustomerCode());
 			System.out.println(savingAccNumber.getCustomer().getCustomerCode());
 			LoanAccount loan = new LoanAccount();
+			loan.setCreatedUser(userId);
+			loan.setCreatedDate(createdDate);
 			loan.setLoanAmount(loanList.getLoanAmount());
 			loan.setAccountStatus(true);
 			loan.setCustomer(loanList.getCustomer());

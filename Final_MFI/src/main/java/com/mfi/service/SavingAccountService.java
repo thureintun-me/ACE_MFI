@@ -21,8 +21,10 @@ public class SavingAccountService {
 		return repo.findAll();
 	}
 	
-	public SavingAccount getSavingAccount(String code) {
-		return repo.findbyCode(code);
+	public SavingAccount getSavingAccount(String accountNumber) {
+		return repo.getAccountNumber(accountNumber);
 	}
+	
+	
 
 }

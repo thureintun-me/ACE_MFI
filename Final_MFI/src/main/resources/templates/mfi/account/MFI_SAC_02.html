@@ -43,17 +43,19 @@
                       
                   
                     </div>
+                    <form class="forms-sample" th:action="@{/savingAccountSearch}" method="post">
                     <div class="form-group">
                       <div class="input-group" >
-                        <input type="text" class="form-control col-sm-3" placeholder="Saving Account Number" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <input type="text" name="savingAccountNumber" class="form-control col-sm-3" placeholder="Saving Account Number" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                          <button class="btn btn-sm btn-gradient-primary" type="button">Search</button>
+                          <input class="btn btn-sm btn-gradient-primary" type="submit" value="search">
                         </div>
                     
                       </div>
                       
                      
                     </div>
+                    </form>
                     <table class="table table-hover">
                       <thead>
                         <tr>
@@ -64,29 +66,18 @@
                         </tr>
                       </thead>
                       <tbody>
-                       <tr>
-                          <td class="py-1">
+                       <tr th:each="account : ${account}">
+                          <td class="py-1" th:text="${account.savingAccountNumber}">
                            <!--  <img src="../../assets/images/faces-clipart/pic-1.png" alt="image" /> -->
-                           1103 1111 0000 0001
+                           
                           </td>
-                          <td>Daw Su Su </td>
-                          <td>
-                            400000
+                          <td th:text="${account.customer.name}"> </td>
+                          <td th:text="${account.balance}">
+                           
                           </td>
-                          <td><a href="MFI_SAC_04.html"><span  class="mdi mdi-eye" title="View Detail"></span></a></td>
+                          <td><a th:href="@{savingDetail/{number}(number=${account.savingAccountNumber})}"><span  class="mdi mdi-eye" title="View Detail"></span></a></td>
                         </tr>                                                            
-                        <tr>
-                          <td class="py-1">
-                           1103 1111 0000 0002
-                          </td>
-                          <td> U Maung Maung </td>
-                          <td>
-                            400000
-                          </td>
-                         
-                          <td><a href="MFI_SAC_04.html"><span  class="mdi mdi-eye" title="View Detail"></span></a></td>
-                        </tr>                                                          
-
+                       
                       </tbody>
                     </table>
                   </div>

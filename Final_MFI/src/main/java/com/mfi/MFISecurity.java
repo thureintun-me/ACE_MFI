@@ -18,7 +18,7 @@ import com.mfi.service.UserDetailsServiceImpl;
 @EnableWebSecurity
 public class MFISecurity extends WebSecurityConfigurerAdapter {
 
-	//test
+	// test
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -55,12 +55,25 @@ public class MFISecurity extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().antMatchers("/").permitAll().and().authorizeRequests().antMatchers("/mfi/**")
-				.hasAnyAuthority("MASTER", "CHECKER", "Blacklist", "MAKER", "Account", "CRM", "COA", "Reports",
-						"Transaction", "Loan")
-				.anyRequest().authenticated().and().formLogin().permitAll().loginPage("/login")
-				.defaultSuccessUrl("/index").failureUrl("/login?error=true").and().logout().logoutSuccessUrl("/login")
-				.invalidateHttpSession(true).deleteCookies("JSESSIONID")
+		http.authorizeRequests()
+		.antMatchers("/").permitAll().
+		and()
+		.authorizeRequests()
+		.antMatchers("/mfi/**")
+		.hasAnyAuthority("MASTER", "CHECKER", "Blacklist", "MAKER", "Account", "CRM", "COA", "Reports",
+						"Transaction", "Loan","Admin")
+		.anyRequest()
+		.authenticated()
+		.and()
+		.formLogin()
+		.permitAll()
+		.loginPage("/login")
+		.defaultSuccessUrl("/index")
+		.failureUrl("/login?error=true")
+		.and()
+		.logout()
+		.logoutSuccessUrl("/login")
+		.invalidateHttpSession(true).deleteCookies("JSESSIONID")
 
 		;
 	}
