@@ -1,8 +1,11 @@
 package com.mfi.formmodel;
 
 import java.sql.Date;
-
 import java.time.LocalDate;
+
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 
 public class LoanInfoForm {
@@ -11,8 +14,12 @@ public class LoanInfoForm {
 	private Integer LoanInfoId;
 
 	private String customerCode;
+	@NotNull(message="Loan Amount should not be null")
+	@DecimalMin("500000.00")
 	private Double loanAmount;
-	private Date registerDate;
+	@NotEmpty(message="Register Date should not be null")
+	private String registerDate;
+	@NotNull(message="Loan Term in Years should not be null")
 	private Integer loanTermYear;
 	private double interestRate;
 	private String description;
@@ -41,10 +48,10 @@ public class LoanInfoForm {
 	public void setLoanAmount(Double loanAmount) {
 		this.loanAmount = loanAmount;
 	}
-	public Date getRegisterDate() {
+	public String getRegisterDate() {
 		return registerDate;
 	}
-	public void setRegisterDate(Date registerDate) {
+	public void setRegisterDate(String registerDate) {
 		this.registerDate = registerDate;
 	}
 	public Integer getLoanTermYear() {

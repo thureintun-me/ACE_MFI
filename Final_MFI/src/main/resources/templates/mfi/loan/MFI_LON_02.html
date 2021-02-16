@@ -55,6 +55,22 @@
                       
                   
                     </div>
+                    
+                     <div th:if="${reg}">
+                            <div class="alert alert-info">
+                              Loan Register Successfully
+                            </div>
+                        </div>
+                        <div th:if="${edit}">
+                            <div class="alert alert-info">
+                              Loan Update Successfully
+                            </div>
+                        </div>
+                        <div th:if="${notfound}">
+                            <div class="alert alert-danger">
+                            Loan not found
+                            </div>
+                        </div>
                     <div class="form-group">
                       <div class="input-group" >
                         <input type="text"  id="loanSearch" class="form-control col-sm-3" placeholder="Customer name,nrc,code,phone" aria-label="Recipient's username" aria-describedby="basic-addon2">

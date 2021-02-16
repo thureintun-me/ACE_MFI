@@ -3,6 +3,8 @@ package com.mfi.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mfi.model.COA;
 import com.mfi.model.Permission;
 import com.mfi.model.Role;
 import com.mfi.model.User;
@@ -32,7 +35,8 @@ public class LoginController {
 	 private  PasswordEncoder passwordEncoder;
 
 	@RequestMapping("/")
-	public String home() {
+	public String home(HttpSession session) {
+	session.setAttribute("role", roleService.selectAll());
 	Permission p=	perService.findByName("MASTER");
 	if(p == null) {
 		createPermission();
@@ -46,21 +50,22 @@ public class LoginController {
 		
 		System.out.println("perService" + perService.findByName("MASTER"));
 		if(user==null) {
-			Role role = new Role();
 			
-			role.setRolePosition("Checker");
-			roleService.save(role);
+			
 			List<Permission> permission = new ArrayList<Permission>();
 			permission.add(perService.findByName("MASTER"));
 			
 			User master=new User();
 			master.setEmail("master@gmail.com");
 			master.setPassword(passwordEncoder.encode("master"));
-			master.setRole(role);
+			
 			for(int i=0;i<permission.size();i++) {
 				master.getPermission().add(permission.get(i));
 				userService.save(master);
 			}
+			
+			COA cash = new COA();
+			
 			
 			
 		}
@@ -86,14 +91,16 @@ public class LoginController {
 			System.out.println("p"+p.getPerName());
 		}
 
-		if (user.getRole().getRolePosition().equals("Checker") || user.getRole().getRolePosition().equals("MASTER") ) {
+		if (user.getRole().getRolePosition().equals("Checker")) {
 			
 			return "redirect:/checker";
 			//return "mfi/dashboard/checker_dashboard" ;
-		} else {
+		} else if(user.getRole().getRolePosition().equals("MAKER")) {
 			
 			return "redirect:/maker";
 
+		}else {
+			return "redirect:/checker";
 		}
 
 	}

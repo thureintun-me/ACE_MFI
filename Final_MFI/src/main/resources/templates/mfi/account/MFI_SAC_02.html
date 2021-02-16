@@ -43,14 +43,22 @@
                       
                   
                     </div>
-                    <form class="forms-sample" th:action="@{/savingAccountSearch}" method="post">
+                    
+                     <div th:if="${notfound}">
+                            <div class="alert alert-info">
+                             Account Not Found
+                            </div>
+                        </div>
+                   <form class="forms-sample" th:action="@{/savingAccountSearch}" th:method="post"> 
                     <div class="form-group">
                       <div class="input-group" >
-                        <input type="text" name="savingAccountNumber" class="form-control col-sm-3" placeholder="Saving Account Number" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <input name="savingAccountNumber" type="text" class="form-control col-sm-3" placeholder="Saving Account Number" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                          <input class="btn btn-sm btn-gradient-primary" type="submit" value="search">
+                        <input type="submit" value="Search" class="btn btn-sm btn-gradient-primary">
+                         <!-- <a th:href="@{/crmSearch}" class="btn btn-sm btn-gradient-primary">Search</a> -->
+                          
                         </div>
-                    
+                        
                       </div>
                       
                      
@@ -66,18 +74,15 @@
                         </tr>
                       </thead>
                       <tbody>
-                       <tr th:each="account : ${account}">
-                          <td class="py-1" th:text="${account.savingAccountNumber}">
-                           <!--  <img src="../../assets/images/faces-clipart/pic-1.png" alt="image" /> -->
-                           
+                       <tr th:each="list : ${account}">
+                          <td class="py-1" th:text="${list.savingAccountNumber}">
                           </td>
-                          <td th:text="${account.customer.name}"> </td>
-                          <td th:text="${account.balance}">
+                          <td th:text="${list.customer.name}"></td>
+                          <td th:text="${list.balance}"></td>
                            
-                          </td>
-                          <td><a th:href="@{savingDetail/{number}(number=${account.savingAccountNumber})}"><span  class="mdi mdi-eye" title="View Detail"></span></a></td>
-                        </tr>                                                            
-                       
+                          <td><a th:href="@{savingDetail/{number}(number=${list.savingAccountNumber})}"><span  class="mdi mdi-eye" title="View Detail"></span></a></td>
+                        </tr>                                                      
+
                       </tbody>
                     </table>
                   </div>

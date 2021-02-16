@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import com.mfi.model.Role;
 import com.mfi.model.SavingAccount;
 import com.mfi.model.Transaction;
 import com.mfi.model.User;
+import com.mfi.service.BlackListService;
 import com.mfi.service.CurrentAccountService;
 import com.mfi.service.CustomerService;
 import com.mfi.service.DisbursementService;
@@ -54,6 +57,8 @@ public class DashboardController {
 	RoleService roleService;
 	@Autowired
 	UserService userService;
+	@Autowired
+	BlackListService blackListService;
 
 	@RequestMapping("/checker")
 	public String checkerDashboard(Model model) {
@@ -77,7 +82,11 @@ public class DashboardController {
 			totalLoan += loan.getLoanAmount();
 		}
 		model.addAttribute("totalLoan", totalLoan);
-
+		
+		//blacklist
+		List<BlackList> blList = blackListService.selectAllBk();
+		int totalBl = blList.size();
+		model.addAttribute("totalBl", totalBl);
 		return "mfi/dashboard/checker_dashboard";
 	}
 
@@ -105,13 +114,17 @@ public class DashboardController {
 			totalLoan += loan.getLoanAmount();
 		}
 		model.addAttribute("totalLoan", totalLoan);
+		List<BlackList> blList = blackListService.selectAllBk();
+		int totalBl = blList.size();
+		model.addAttribute("totalBl", totalBl);
 		return "mfi/dashboard/maker_dashboard";
 	}
 
 	@RequestMapping("/role")
 	public String role(Model model) {
 		model.addAttribute("roleBean", new Role());
-		model.addAttribute("role", roleService.selectAll());
+		
+		
 		return "mfi/user/MFI_ROL_01";
 	}
 
@@ -184,13 +197,13 @@ public class DashboardController {
 		return "mfi/transaction/MFI_RPM_02";
 	}
 
-	@RequestMapping("/coa")
-	public String coa() {
-		return "mfi/coa/MFI_COA_02";
-	}
+	/*
+	 * @RequestMapping("/coa") public String coa() { return "mfi/coa/MFI_COA_02"; }
+	 */
 
 	@RequestMapping("/createBlackList")
-	public String createBlackList() {
+	public String createBlackList(Model model) {
+		model.addAttribute("blackList", new BlackList());
 		return "mfi/blacklist/MFI_BLT_01";
 	}
 
@@ -223,16 +236,16 @@ public class DashboardController {
 		return "mfi/reports/MFI_RPT_CUS";
 	}
 
-	@RequestMapping("accountListing")
-	public String accountListing(Model model) {
-		List<CurrentAccount> currentAccount = currentService.selectAll();
-		List<SavingAccount> savingAccount = savingService.selectAll();
-		List<LoanAccount> loanAccount = loanAccountService.selectAll();
-		model.addAttribute("currentAccount", currentAccount);
-		model.addAttribute("savingAccount", savingAccount);
-		model.addAttribute("loanAccount", loanAccount);
-		return "mfi/reports/MFI_RPT_ACC";
-	}
+	/*
+	 * @RequestMapping("accountListing") public String accountListing(Model model) {
+	 * List<CurrentAccount> currentAccount = currentService.selectAll();
+	 * List<SavingAccount> savingAccount = savingService.selectAll();
+	 * List<LoanAccount> loanAccount = loanAccountService.selectAll();
+	 * model.addAttribute("currentAccount", currentAccount);
+	 * model.addAttribute("savingAccount", savingAccount);
+	 * model.addAttribute("loanAccount", loanAccount); return
+	 * "mfi/reports/MFI_RPT_ACC"; }
+	 */
 
 	@RequestMapping("overdueListing")
 	public String overdueListing(Model model) {

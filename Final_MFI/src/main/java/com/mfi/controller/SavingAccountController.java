@@ -27,9 +27,14 @@ public class SavingAccountController {
 	public String currentSearch(@Param("savingAccountNumber")String savingAccountNumber, Model model) {
 		
 		SavingAccount account = savingAccountService.getSavingAccount(savingAccountNumber);
-		model.addAttribute("account",account);
-		System.out.println(account.getBalance());
-		return "mfi/account/MFI_SAC_02";
+		if(account!=null) {
+			model.addAttribute("account",account);
+			return "mfi/account/MFI_SAC_02";	
+		}else {
+			model.addAttribute("notfound",true);
+			return "mfi/account/MFI_SAC_02";
+		}
+	
 	}
 	
 	@GetMapping("/savingDetail/{number}")

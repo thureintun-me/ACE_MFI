@@ -23,6 +23,7 @@ public class CustomerForm {
 	@Email(message="Enter valid email format")
 	@NotEmpty(message = "Email should not be null")
 	private String email;
+	@NotEmpty(message = "Gender should not be null")
 	private String gender;
 	@NotEmpty(message="Address should not be null")
 	private String address;

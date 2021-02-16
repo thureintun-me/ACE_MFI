@@ -60,6 +60,7 @@ public class DisbursementController {
 		savingService.save(savingAccount);
 		
 		COA coa = coaService.getCOA("Cash");
+		System.out.println( "accNumber"+ coa.getAccountNumber());
 		coa.setAmount(coa.getAmount()- loanAmount);
 		coa.setUpdateDate(date);
 		coaService.update(coa);

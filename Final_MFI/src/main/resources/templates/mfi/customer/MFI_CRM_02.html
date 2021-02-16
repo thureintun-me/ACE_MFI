@@ -44,7 +44,25 @@
                       
                   
                     </div>
-                     <p th:text=" ${#request.getParameter('mesg')}" style="color: blue; font-size:25px;"></p>
+                    <div th:if="${reg}">
+                            <div class="alert alert-info">
+                              Customer Register Successfully
+                            </div>
+                        </div>
+                        
+                        <div th:if="${edit}">
+                            <div class="alert alert-info">
+                              Customer Edit Successfully
+                            </div>
+                        </div>
+                        
+                         <div th:if="${notfound}">
+                            <div class="alert alert-info">
+                             No Customer Found
+                            </div>
+                        </div>
+                    
+                     
                     <form th:action="@{/crmSearch}" method="post" th:object="${crmBean}"> 
                     <div class="form-group">
                       <div class="input-group" >

@@ -18,6 +18,8 @@ import com.mfi.repository.LoanScheduleRepository;
 public class LoanScheduleService {
 	
 	@Autowired
+	
+	
 
 	LoanScheduleRepository loanScheduleRep;
 

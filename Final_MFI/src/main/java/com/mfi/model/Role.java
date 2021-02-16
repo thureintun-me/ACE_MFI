@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Role {
@@ -13,7 +14,9 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int roleId;
+	@NotEmpty(message ="role name should not be null")
 	private String roleName;
+	@NotEmpty(message = "Position should not be null")
 	private String rolePosition;
 	private int createdUser;
 	private Date createdDate;

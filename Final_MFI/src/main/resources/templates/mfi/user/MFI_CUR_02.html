@@ -45,6 +45,24 @@
                       
                   
                     </div>
+                    <div th:if="${search}">
+                            <div class="alert alert-danger">
+                               User Not Found
+                            </div>
+                        </div>
+                    <div th:if="${reg}">
+                            <div class="alert alert-info">
+                               User Register Successfully
+                            </div>
+                        </div>
+                        
+                        <div th:if="${edit}">
+                            <div class="alert alert-info">
+                               User Update Successfully
+                            </div>
+                        </div>
+                    
+                     <p th:text=" ${#request.getParameter('mesg')}" style="color: blue; font-size:25px;"></p>
                     <form th:action="@{/userSearch}" method="post" th:object="${userBean}"> 
                     <div class="form-group" >
                       <div class="input-group" >

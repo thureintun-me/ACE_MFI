@@ -35,8 +35,17 @@ public class CurrentAccountController {
 	public String currentSearch(@Param("currentAccountNumber")String currentAccountNumber, Model model) {
 		
 		CurrentAccount account = currentService.getAccountNumber(currentAccountNumber);
-		model.addAttribute("account",account);
-		return "mfi/account/MFI_CAC_02";
+		
+		
+		if(account!=null) {
+			model.addAttribute("account",account);
+			return "mfi/account/MFI_CAC_02";	
+		}else {
+			model.addAttribute("notfound",true);
+			return "mfi/account/MFI_CAC_02";
+		}
+	
+		
 	}
 	
 	@GetMapping("/currentDetail/{number}")

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mfi.model.LoanInfo;
+
 import com.mfi.model.SavingAccount;
 import com.mfi.repository.SavingAccountRepository;
 
@@ -21,10 +21,17 @@ public class SavingAccountService {
 		return repo.findAll();
 	}
 	
-	public SavingAccount getSavingAccount(String accountNumber) {
-		return repo.getAccountNumber(accountNumber);
+	public SavingAccount getSavingAccount(String code) {
+		return repo.findbyCode(code);
 	}
-	
-	
-
+	public double selectTotalSaving() {
+		return repo.totalSaving();
+		
+	}
+	public SavingAccount getAccountNumber(String code) {
+		return repo.getAccountNumber(code);
+	}
+	public void update(SavingAccount savingAccount) {
+		repo.save(savingAccount);
+	}
 }

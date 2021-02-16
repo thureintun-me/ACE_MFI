@@ -115,6 +115,9 @@
                           <label class="form-check-label ">
                             <input type="radio" class="form-check-input " name="optionsRadios" id="gender" value="Female"  th:field="*{gender}"> Female</label>
                         </div>
+                        
+                          <p th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"
+														style="color: red;margin-left:-80px;"></p>
                       </div>
                         
                       </div>

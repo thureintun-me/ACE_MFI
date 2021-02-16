@@ -44,33 +44,49 @@
                       
                   
                     </div>
-                    <form class="forms-sample">
+                    <div th:if="${mesg}">
+                            <div class="alert alert-info">
+                               Changed Password Successfully
+                            </div>
+                        </div>
+                    <div th:if="${err}">
+                            <div class="alert alert-danger">
+                                Change Password Failed
+                            </div>
+                        </div>
+                    <form class="forms-sample" th:action="@{/userChangePassword}" method="post" th:object="${changePasswordBean}">
                       <div class="form-group row">
                         <div class="col-sm-3"></div>
                         <label for="exampleInputUsername2" class="col-sm-2 col-form-label">Name *</label>
                         <div class="col-sm-4 ">
-                          <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Name" disabled="disabled">
+                          <input type="text" th:value="${changePassuname}" class="form-control" id="exampleInputUsername2" placeholder="Name" disabled="disabled">
                         </div>
                       </div>
-                      <div class="form-group row">
+                     <!--   <div class="form-group row">
                         <div class="col-sm-3"></div>
                         <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Old Password *</label>
                         <div class="col-sm-4">
-                          <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Old Password">
+                          <input type="password" th:field="*{oldPassword}" class="form-control" id="exampleInputEmail2" placeholder="Old Password">
                         </div>
-                      </div>
+                      </div>-->
                       <div class="form-group row">
                         <div class="col-sm-3"></div>
                         <label for="exampleInputEmail2" class="col-sm-2 col-form-label">New Password *</label>
                         <div class="col-sm-4">
-                          <input type="text" class="form-control" id="exampleInputEmail2" placeholder="New Password">
+                          <input type="password" th:field="*{newPassword}" class="form-control" id="exampleInputEmail2" placeholder="New Password">
+                                                     <br>
+                          <p th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}"
+														style="color: red;"></p>
+                          
                         </div>
                       </div>
                       <div class="form-group row">
                         <div class="col-sm-3"></div>
                         <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Confirm Password *</label>
                         <div class="col-sm-4">
-                          <input type="text" class="form-control" id="exampleInputEmail2" placeholder="Confirm Password">
+                          <input type="password"th:field="*{confirmPassword}" class="form-control" id="exampleInputEmail2" placeholder="Confirm Password">
+                           <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+														style="color: red;"></p>
                         </div>
                       </div>
 
@@ -78,7 +94,7 @@
                         <div class="col-sm-5"></div>
                       <div class="col-sm-7">
                         <!-- <button type="submit" class="btn btn-gradient-primary mr-2">Edit</button> -->
-                        <a href="MFI_BLT_02.html" class="btn btn-gradient-success mr-2" >EDIT</a>
+                        <input type="submit" class="btn btn-gradient-success mr-2" value="EDIT"></a>
                         <a href="MFI_BLT_02.html" class="btn btn-secondary">BACK</a>
                          <!-- <button class="btn btn-light">Cancel</button> -->
                       </div>

@@ -6,6 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+
+import com.mfi.customvalidator.NRC;
 
 @Entity
 public class BlackList {
@@ -13,10 +16,17 @@ public class BlackList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int blackListId;
+	@NotEmpty(message="Name should not be null")
 	private String name;
+	@NRC(message="Invalid NRC")
 	private String nrc;
+	@NotEmpty(message="Address should not be null")
 	private String address;
+	@NotEmpty(message="Father Name should not be null")
 	private String fatherName;
+	@NotEmpty(message="Remark should not be null")
+	private String remark;
+	
 	private int createdUser;
 	private Date createdDate;
 	private int updateUser;
@@ -27,7 +37,7 @@ public class BlackList {
 	}
 
 	public BlackList(int blackListId, String name, String nrc, String address, String fatherName, int createdUser,
-			Date createdDate, int updateUser, Date updateDate) {
+			Date createdDate, int updateUser, Date updateDate,String remark) {
 		super();
 		this.blackListId = blackListId;
 		this.name = name;
@@ -38,6 +48,7 @@ public class BlackList {
 		this.createdDate = createdDate;
 		this.updateUser = updateUser;
 		this.updateDate = updateDate;
+		this.remark=remark;
 	}
 
 	public int getBlackListId() {
@@ -111,5 +122,14 @@ public class BlackList {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 
 }

@@ -116,7 +116,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 					class="menu-title">COA</span> <i
 					class="mdi mdi-credit-card menu-icon" style="color: white;"></i>
 			</a></li>
-			<li class="nav-item" sec:authorize="hasAnyRole('Blacklist','MASTER')">
+			<li class="nav-item" sec:authorize="hasAnyAuthority('Blacklist','MASTER')">
 				<!-- <a class="nav-link" href="pages/tables/basic-table.html"> --> <a
 				class="nav-link" data-toggle="collapse" href="#ui-blacklist"
 				aria-expanded="false" aria-controls="ui-blacklist"> <span

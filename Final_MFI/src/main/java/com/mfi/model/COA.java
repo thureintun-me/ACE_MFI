@@ -11,7 +11,6 @@ import javax.persistence.Id;
 public class COA {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int CoaId;
 	private int bankId;
 	private String glType;

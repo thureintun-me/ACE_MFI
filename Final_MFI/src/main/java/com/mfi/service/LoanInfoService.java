@@ -34,6 +34,10 @@ public class LoanInfoService {
 		return loanRep.findCrmCode(crmCode);
 	}
 	
+	public List<LoanInfo> getLoanInfobyCrmCode(String crmCode) {
+		return loanRep.getLoanInfoByCustomerCode(crmCode);
+	}
+	
 //	public LoanInfo searchLoanInfobyTs(Timestamp date) {
 //		return loanRep.findByTs(date);
 //	}
@@ -98,10 +102,6 @@ public class LoanInfoService {
 	
 	public LoanInfo selectOne(int loanId) {
 		return loanRep.getByLoanInfoId(loanId);
-	}
-	
-	public List<LoanInfo> selectAll(){
-		return loanRep.findAll();
 	}
 
 }

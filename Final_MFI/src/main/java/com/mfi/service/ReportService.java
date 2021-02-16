@@ -56,16 +56,14 @@ public class ReportService {
 	public List<LoanSchedule> overDueFilter(LocalDate start, LocalDate end,String status){
 		return repaymentRepo.overDueFilter(start, end, status);
 	}
-	public LoanSchedule completeSchdule(String status, int loanInfo){
-		return loanRepo.findbyStatus(status,loanInfo);
-	}
-	public Double getSum(String status, int loanInfo){
-		return loanRepo.getSum(status,loanInfo);
-	}
-	
-	public List<LoanSchedule> findAllLoan(int loanInfo){
-		return loanRepo.findAllLoan(loanInfo);
-	}
+	/*
+	 * public LoanSchedule completeSchdule(String status, int loanInfo){ return
+	 * loanRepo.findbyStatus(status,loanInfo); } public Double getSum(String status,
+	 * int loanInfo){ return loanRepo.getSum(status,loanInfo); }
+	 * 
+	 * public List<LoanSchedule> findAllLoan(int loanInfo){ return
+	 * loanRepo.findAllLoan(loanInfo); }
+	 */
 	
 	
 	public List<CurrentAccount> currentAccountFilter(Date start, Date end){
@@ -78,5 +76,5 @@ public class ReportService {
 		return loanAccRepo.accountFilter(start, end);
 	}
 	
-
+	
 }

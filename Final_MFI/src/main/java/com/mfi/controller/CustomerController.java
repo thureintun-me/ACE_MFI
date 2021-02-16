@@ -30,7 +30,7 @@ public class CustomerController {
 	@Autowired
 	private CustomerService crmService;	
 	@PostMapping("/register")
-	public String addCrm(@ModelAttribute("crmBean") @Valid CustomerForm crm, BindingResult result, Model model) {
+	public String addCrm(@ModelAttribute("crmBean") @Valid CustomerForm crm, BindingResult result, Model model,RedirectAttributes redirectAttrs) {
         if (result.hasErrors()) {
         	model.addAttribute("crmBean",crm);
             return "mfi/customer/MFI_CRM_01";
@@ -45,7 +45,7 @@ public class CustomerController {
         	if(cus.getNrc().equals(nrc)) {
         		model.addAttribute("message","Customer already exist!!!");
         		model.addAttribute("crmBean",crm);
-        		return "mif/customer/MFI_CRM_01";
+        		return "mfi/customer/MFI_CRM_01";
         	}
         }
 		if(crmlist.isEmpty()) {
@@ -87,6 +87,7 @@ public class CustomerController {
 		customer.setCreatedDate(createdDate);
 		
 		crmService.save(customer);
+		redirectAttrs.addFlashAttribute("reg", true);
 		return "redirect:/customerSearch";
 		
 		
@@ -98,12 +99,16 @@ public class CustomerController {
 		
 			String query=crm.getName()==null?crm.getNrc():crm.getName();
 			if(query.equals("")) {
-				List<Customer> crmList = crmService.selectAll();
-				model.addAttribute("crmList", crmList);
-				//model.addAttribute("mesg", message);
+				
+				model.addAttribute("notfound", true);
 				return "mfi/customer/MFI_CRM_02";
 			}else {
+				
 				List<Customer> crmList = crmService.searchNameOrNrc(query);
+				if(crmList.size()==0) {
+					model.addAttribute("notfound", true);
+					return "mfi/customer/MFI_CRM_02";
+				}
 				model.addAttribute("crmList", crmList);
 				//model.addAttribute("mesg", message);
 				return "mfi/customer/MFI_CRM_02";
@@ -171,8 +176,8 @@ public class CustomerController {
 			customer.setUpdateUser(1);
 			customer.setUpdateDate(updatedDate);
 			crmService.update(customer);
-			String mesg="Update Successfully!!!";
-			return "redirect:/customerSearch?mesg="+mesg;
+			redirectAttrs.addFlashAttribute("edit", true);
+			return "redirect:/customerSearch";
 		}
 		@GetMapping("/customerDetail/{id}")
 		public String viewDetail(@PathVariable("id")String id,Model model) {

@@ -4,34 +4,55 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Range;
 
+import com.mfi.customvalidator.NRC;
+import com.mfi.customvalidator.Phone;
 import com.mfi.model.Permission;
 
 public class Userform {
 	
 	
 	private int user_id;
+	@NotEmpty(message="Name should not be null")
 	private String name;
+	@NotEmpty(message="Password should not be null")
 	private String password;
 	@Transient
+	@NotEmpty(message="Confirm Password should not be null")
 	private String conPass;
+	@Phone(message="Invalid Phone Number")
 	private String phone;
+	@Email(message="Invalid email format")
+	@NotEmpty(message="Email should not be null")
 	private String email;
+	@NRC(message="Invalid NRC format")
+	@NotEmpty(message = "")
 	private String nrc;
+	@NotEmpty(message="Position should not be null")
 	private String position;
 	//public String permission;
+	@NotEmpty(message="Persmission should not be null")
 	private List<String> permission = new ArrayList<String>();
 	private int createdUser;
 	private Date createdDate;
 	private int updateUser;
 	private Date updateDate;
 	
+	
+	@Min(value=1,message = "Role Name should not be null")
 	private int role;
 
 	public int getUser_id() {

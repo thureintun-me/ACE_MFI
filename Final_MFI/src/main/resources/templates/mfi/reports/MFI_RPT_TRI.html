@@ -69,8 +69,7 @@
                     <div class="form-group row">
 									<div class="col-md-9"></div>
 									<div class="col-md-4">
-										<button type="button" data-toggle="modal"
-											data-target="#exampleModal" class="btn btn-gradient-primary ">Filter</button>
+										
 										<div class="modal fade" id="exampleModal" tabindex="-1"
 											role="dialog" aria-labelledby="exampleModalLabel"
 											aria-hidden="true">
@@ -98,15 +97,12 @@
 															
 														</form>
 													</div>
-													<div class="modal-footer">
-														<button type="button" class="btn btn-secondary"
-															data-dismiss="modal">Close</button>
-														<button type="button" class="btn btn-gradient-primary">Search</button>
-													</div>
+													
 												</div>
 											</div>
 										</div>
-										<button type="submit" class="btn btn-gradient-primary ">Export</button>
+										<a th:href="@{/TRIReportExport}"><button type="submit" class="btn btn-gradient-primary ">Export</button></a>
+
 
 									</div>
 
@@ -127,47 +123,46 @@
                           <td>Capital </td>
                           <td></td>
                           <td></td>
-                          <td>100,000,000</td>
+                          <td th:text="${capitalAmount}"></td>
                         </tr>
                         <tr>
                           <td>Cash </td>
                           <td></td>
-                          <td>9,111,000</td>
+                          <td th:text="${cashAmount}"></td>
                           <td></td>
                         </tr>
                         <tr>
                           <td>Income </td>
                           <td></td>
                           <td></td>
-                          <td>100,000</td>
+                          <td th:text="${incomeAmount}"></td>
                         </tr>
                         <tr>
                           <td>Loan </td>
                           <td></td>
-                          <td>900,000</td>
+                          <td th:text="${loanAmount}"></td>
                           <td></td>
                         </tr>
                         <tr>
                           <td>Current </td>
                           <td></td>
                           <td></td>
-                          <td>0</td>
+                          <td th:text="${currentAmount}"></td>
                         </tr>
                         <tr>
                           <td>Saving </td>
                           <td></td>
                           <td></td>
-                          <td>1,000</td>
+                          <td th:text="${savingAmount}"></td>
                         </tr>
                         <tr>
-                          <td> </td>
+                          <td>Total Balance</td>
                           <td></td>
-                          <td>10,011,000</td>
-                          <td>100,101,000</td>
+                          <td th:text="${AssestsTotalBalance}"></td>
+                          <td th:text="${ LiabilitiesTotalBalance}"> </td>
                         </tr>
                       </tbody>
-                    </table>
-                  
+                    </table>     
           </div>
           </div>
           </div>

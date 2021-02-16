@@ -33,4 +33,9 @@ public class CurrentAccountService {
 	public CurrentAccount getAccountNumber(String code) {
 		return repo.getAccountNumber(code);
 	}
+	
+	public double selectTotalCurrent() {
+		return repo.totalCurrent();
+		
+	}
 }

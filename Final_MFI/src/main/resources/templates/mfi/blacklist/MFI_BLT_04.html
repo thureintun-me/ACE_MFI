@@ -45,23 +45,23 @@
                   
                     </div>
                     <form class="forms-sample">
-                      <div class="row">
+                      <div class="row" >
                         
                           <div class="col-md-6 border-right">
                             <div class="border-bottom p-2">
                               <label for="custCo" class="col-md-5">Name</label>
                               <span class="col-md-2">-</span>
-                              <span id="custCo" class="col-md-5">Herman Beck</span>
+                              <span id="custCo" class="col-md-5" th:text="${viewDetail.name}"></span>
                             </div>
                             <div class="border-bottom p-2">
                               <label for="custCo" class="col-md-5">NRC</label>
                               <span class="col-md-2">-</span>
-                              <span id="custCo" class="col-md-5">12/KaTaDa(N)123456</span>
+                              <span id="custCo" class="col-md-5" th:text="${viewDetail.nrc}"></span>
                             </div>
                             <div class="border-bottom p-2">
                               <label for="custCo" class="col-md-5">Address</label>
                               <span class="col-md-2">-</span>
-                              <span id="custCo" class="col-md-5">12/KaTaDa(N)123456</span>
+                              <span id="custCo" class="col-md-5" th:text="${viewDetail.address}"></span>
                             </div>
                             
                         
@@ -72,12 +72,12 @@
                             <div class="border-bottom p-2">
                               <label for="custCo" class="col-md-5">Father Name</label>
                               <span class="col-md-2">-</span>
-                              <span id="custCo" class="col-md-5">PhayPhay</span>
+                              <span id="custCo" class="col-md-5" th:text="${viewDetail.fatherName}"></span>
                             </div>
                             <div class="border-bottom p-2">
                               <label for="custCo" class="col-md-5">Remark</label>
                               <span class="col-md-2">-</span>
-                              <span id="custCo" class="col-md-5">Loan Overdue</span>
+                              <span id="custCo" class="col-md-5" th:text="${viewDetail.remark}"></span>
                             </div>
                             
                             
@@ -89,10 +89,12 @@
                           <div class="form-group row">       
                             <div class="col-sm-7">
       
-                              <a href="MFI_BLT_02.html" class="btn btn-gradient-danger mr-2" >Delete</a>
-                              <a href="MFI_BLT_02.html" class="btn btn-secondary" >Back</a>
+                              <!-- <a th:href="@{deleteBlacklist/{id}(id=${blacklists.blackListId})}" class="btn btn-gradient-danger mr-2" >Delete</a> -->
+                              <a  class="btn btn-gradient-primary mr-2" th:href="@{/deleteBlackList/{id}(id=${viewDetail.blackListId})}">
+                              Delete</a>
+                              <a  th:href="@{/searchBlackList}" class="btn btn-secondary" >Back</a>
                             </div>
-                         
+                         </div>
                       </form>
                    
                   </div>

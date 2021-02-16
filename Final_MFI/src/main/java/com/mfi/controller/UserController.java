@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.mfi.formmodel.CustomerForm;
 import com.mfi.formmodel.Userform;
 import com.mfi.model.Permission;
 import com.mfi.model.Role;
@@ -42,28 +45,43 @@ public class UserController {
 
 	@GetMapping("/setupuserRegister")
 	public String setupuserRegister(Model model) {
-		List<Role> role = roleService.selectAll();
+		
+		
 		model.addAttribute("userBean", new Userform());
-		model.addAttribute("role", role);
+		//model.addAttribute("role", role);
 		model.addAttribute("permission", permissionService.selectAll());
+		
 		return "mfi/user/MFI_CUR_01";
 	}
 
 	@PostMapping("/userRegister")
-	public String userRegister(@ModelAttribute("userBean") Userform user, Model model) {
+	public String userRegister(@ModelAttribute("userBean") @Valid Userform user,BindingResult bindingResult, Model model) {
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("userBean", user);
+			
+			return "mfi/user/MFI_CUR_01";
+		}
 		User checkUser = userService.findByEmail(user.getEmail());
 		
 		if (!user.getConPass().equals(user.getPassword())) {
 			model.addAttribute("user", user);
 			model.addAttribute("role", roleService.selectAll());
+			model.addAttribute("mesg", "Password and Confirm Password has to be the same");
 			return "mfi/user/MFI_CUR_01";
 		}else if(checkUser != null) {
 			
 			model.addAttribute("user", user);
 			model.addAttribute("role", roleService.selectAll());
+			model.addAttribute("mesg", "User Already Exist!");
 			return "mfi/user/MFI_CUR_01";
 		}
 
+		if (!user.getConPass().equals(user.getPassword())) {
+			model.addAttribute("user", user);
+//			model.addAttribute("error", "error");
+			model.addAttribute("conpass", true);
+			return "mfi/user/MFI_CUR_03";
+		}
 		Role role = roleService.selectId(user.getRole());
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
@@ -103,27 +121,37 @@ public class UserController {
 //		
 
 		System.out.println("perName" + user.getPermission());
+		model.addAttribute("reg", true);
 		return "mfi/user/MFI_CUR_02";
 	}
 
 	@RequestMapping("/userSearch")
 	public String searchAll(@ModelAttribute("userBean") User user, Model model) {
-		List<User> userList = userService.findbyName(user.getName());
-		model.addAttribute("userList", userList);
-		return "mfi/user/MFI_CUR_02";
+		if(user.getName()!=null) {
+			List<User> userList = userService.findbyName(user.getName());
+			if(userList.size()==0) {
+				model.addAttribute("search",true);
+			}
+			model.addAttribute("userList", userList);
+			return "mfi/user/MFI_CUR_02";
+		}else {
+			return "mfi/user/MFI_CUR_02";
+		}
+		
+		
 
 	}
 
 	@GetMapping("/userEdit/{id}")
 	public String userEdit(@PathVariable("id") int id, Model model) {
-		List<Role> roleList = roleService.selectAll();
-		model.addAttribute("roleList", roleList);
+		
 		User user = userService.selectOne(id);
 		
 		Userform userForm = new Userform();
 		userForm.setUser_id(id);
 		userForm.setName(user.getName());
 		userForm.setEmail(user.getEmail());
+		userForm.setPosition(user.getPosition());
 		userForm.setNrc(user.getNrc());
 		userForm.setPhone(user.getPhone());
 		userForm.setPassword(user.getPassword());
@@ -142,14 +170,15 @@ public class UserController {
 
 	@PostMapping("/userEdit/{id}")
 	public String usreUpdate(@ModelAttribute("userEdit") @Valid Userform user, BindingResult result,
-			@PathVariable("id") int id, Model model) {
+			@PathVariable("id") int id, RedirectAttributes redirect,Model model) {
 		if (result.hasErrors()) {
 			model.addAttribute("user", user);
-			return "MFI_CUR_03";
+			return "mfi/user/MFI_CUR_03";
 		}
 		if (!user.getConPass().equals(user.getPassword())) {
 			model.addAttribute("user", user);
 //			model.addAttribute("error", "error");
+			model.addAttribute("conpass", true);
 			return "mfi/user/MFI_CUR_03";
 		}
 
@@ -159,7 +188,7 @@ public class UserController {
 		int userId = currentPrincipalName.getUserId();
 		LocalDate now = LocalDate.now();
 		Date updateDate = Date.valueOf(now);
-		 
+		
 		User userBean = userService.selectOne(id);
 		userBean.setName(user.getName());
 		userBean.setEmail(user.getEmail());
@@ -191,12 +220,9 @@ public class UserController {
 		}
 		userService.update(userBean);
 
-		System.out.println(user.getRole());
-//		
-
-		System.out.println("perName" + user.getPermission());
-		String mesg="Update Successfully!!!";
-		return "redirect:/userSearch?mesg="+mesg;
+	redirect.addFlashAttribute("edit", true);
+		
+		return "redirect:/userSearch";
 	}
 
 }

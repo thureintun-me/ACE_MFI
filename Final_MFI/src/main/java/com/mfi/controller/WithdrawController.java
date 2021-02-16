@@ -38,6 +38,15 @@ public class WithdrawController {
 		Date date = Date.valueOf(now);
 //		get amount
 		Double amount = transaction.getAmount();
+		String accountNo=transaction.getAccountNumber();
+		CurrentAccount currentAcc=currentAccountService.getAccountNumber(accountNo);
+		
+		if(currentAcc == null) {
+			model.addAttribute("transaction", transaction);
+			model.addAttribute("errorMessage","Account number does not exist");
+			return "mfi/transaction/MFI_WTD_01";
+			
+		}
 		
 		CurrentAccount currentAccount = currentAccountService.getAccountNumber(transaction.getAccountNumber());
 		Double balance = currentAccount.getBalance()-amount;
@@ -68,7 +77,7 @@ public class WithdrawController {
 		bankTran.setCreatedDate(date);
 		transactionService.bankTran(bankTran);
 		model.addAttribute("withdrawBean", new Transaction());
-		
+		model.addAttribute("reg",true);
 		return "mfi/transaction/MFI_WTD_01";
 	}
 	

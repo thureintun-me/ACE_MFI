@@ -45,8 +45,12 @@
                       
                   
                     </div>
-                    <br>
-															
+                    
+							 <div th:if="${notfound}">
+                            <div class="alert alert-info">
+                             Account Not Found
+                            </div>
+                        </div>							
                      <form class="forms-sample" th:action="@{/currentAccountSearch}" th:method="post"> 
                     <div class="form-group">
                       <div class="input-group" >

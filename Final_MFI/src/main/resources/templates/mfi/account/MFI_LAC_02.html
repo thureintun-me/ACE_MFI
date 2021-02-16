@@ -44,22 +44,26 @@
                       
                   
                     </div>
+                    <div th:if="${notfound}">
+                            <div class="alert alert-info">
+                             Account Not Found
+                            </div>
+                        </div>
+                   <form class="forms-sample" th:action="@{/loanAccountSearch}" th:method="post"> 
                     <div class="form-group">
                       <div class="input-group" >
-                        <input type="text" class="form-control col-sm-3" placeholder="Loan Account Number" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <input name="loanAccountNumber" type="text" class="form-control col-sm-3" placeholder="Loan Account Number" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                          <button class="btn btn-sm btn-gradient-primary" type="button">Search</button>
-                        </div>
-                       <!--  <div class="col-sm-2  ">
-                          <a href="MFI_LAC_01.html" class="btn btn-gradient-info" style="height: 46px;">Add</a>
-                        
-                        
+                        <input type="submit" value="Search" class="btn btn-sm btn-gradient-primary">
+                         <!-- <a th:href="@{/crmSearch}" class="btn btn-sm btn-gradient-primary">Search</a> -->
                           
-                        </div> -->
+                        </div>
+                        
                       </div>
                       
                      
                     </div>
+                    </form>
                     <table class="table table-hover">
                       <thead>
                         <tr>
@@ -70,28 +74,14 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td class="py-1">
-                           <!--  <img src="../../assets/images/faces-clipart/pic-1.png" alt="image" /> -->
-                           1101 1111 0000 0001
+                        <tr th:each="list : ${account}">
+                          <td class="py-1" th:text="${list.loanAccountNumber}">
                           </td>
-                          <td>Daw Su Su </td>
-                          <td>
-                            400000
-                          </td>
-                          <td><a href="MFI_LAC_04.html"><span  class="mdi mdi-eye" title="View Detail"></span></a></td>
-                        </tr>                                                            
-                        <tr>
-                          <td class="py-1">
-                           1101 1111 0000 0002
-                          </td>
-                          <td> U Maung Maung </td>
-                          <td>
-                            400000
-                          </td>
-                         
-                          <td><a href="MFI_LAC_04.html" ><span  class="mdi mdi-eye" title="View Detail"></span></a></td>
-                        </tr> 
+                          <td th:text="${list.customer.name}"></td>
+                          <td th:text="${list.loanAmount}"></td>
+                           
+                          <td><a th:href="@{loanDetail/{number}(number=${list.loanAccountNumber})}"><span  class="mdi mdi-eye" title="View Detail"></span></a></td>
+                        </tr>  
 
                       </tbody>
                     </table>

@@ -44,13 +44,28 @@
                     
                 
                   </div>
+                   <div th:if="${reg}">
+                            <div class="alert alert-info">
+                               Role Register Successfully
+                            </div>
+                        </div>
+                    <div th:if="${edit}">
+                            <div class="alert alert-info">
+                               Role Edit Successfully
+                            </div>
+                        </div>
                   <form class="forms-sample" th:action="@{/roleregister}" method="post" th:object="${roleBean}">
                     <div class="form-group row">
                       <div class="col-sm-3"></div>
                       <label for="exampleInputUsername2" class="col-sm-2 col-form-label">Role Name </label>
                       <div class="col-sm-4 ">
                         <input type="text" class="form-control" id="exampleInputUsername2" th:field="*{roleName}" placeholder="Role Name">
+                        <br />
+                        <p th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}"
+														style="color: red;"></p>
                       </div>
+                      <br />
+                      
                     </div>
                    
                     <div class="form-group row">
@@ -67,8 +82,14 @@
                         <div class="form-check " >
                           <label class="form-check-label ">
                             <input type="radio" class="form-check-input " name="optionsRadios" th:field="*{rolePosition}"  id="gender" value="Maker" > Maker</label>
+                               <br />
+                               <p th:if="${#fields.hasErrors('rolePosition')}" th:errors="*{rolePosition}"
+														style="color: red;margin-left: -100px;"></p>
                         </div>
+                      
                       </div>
+                                             
+                     
                         
                       </div>
                    
@@ -98,7 +119,7 @@
                                 </tr>
                               </thead>
                               <tbody >
-                                <tr th:each="role : ${role}">
+                                <tr th:each="role : ${session.role}">
                                   <td th:text="${role.roleName}"> Maker </td>
                                  
                                 

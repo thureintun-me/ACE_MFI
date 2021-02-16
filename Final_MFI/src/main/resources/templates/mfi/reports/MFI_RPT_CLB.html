@@ -104,7 +104,7 @@
 												</div>
 											</div>
 										</div>
-										<button type="submit" class="btn btn-gradient-primary ">Export</button>
+										<a th:href="@{/customerLedgerBalanceExport}"><button type="submit" class="btn btn-gradient-primary ">Export</button></a>
 
 									</div>
 
@@ -126,7 +126,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                       <tr th:each="list :${currentAccount}">
+                      <!--  <tr th:each="list :${currentAccount}">
                           <td th:text="${list.Customer.name}"></td>
                           <td th:text="${list.Customer.nrc}"></td>
                           <td>Current Account</td>
@@ -150,7 +150,9 @@
                            
                           <td th:text="${list.loanAmount}"> </td>
                         </tr>  
-                        
+                         -->
+                         <tr th:each="list :${accounts}">
+                         </tr>
                     </tbody>
                   </table>
 				

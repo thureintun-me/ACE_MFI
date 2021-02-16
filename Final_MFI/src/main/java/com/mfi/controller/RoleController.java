@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.mfi.model.Customer;
 import com.mfi.model.Role;
@@ -35,7 +36,13 @@ public class RoleController {
 	}
 
 	@PostMapping("/roleregister")
-	public String addCrm(@ModelAttribute("roleBean")  Role role, Model model) {
+	public String addCrm(@ModelAttribute("roleBean") @Valid Role role, BindingResult result,
+			 RedirectAttributes model) {
+		if (result.hasErrors()) {
+			model.addFlashAttribute("roleBean", role);
+			model.addFlashAttribute("Register Faield", "mesg");
+			return "mfi/user/MFI_ROL_01";
+		}
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
 		int userId = currentPrincipalName.getUserId();
@@ -48,6 +55,8 @@ public class RoleController {
         	roleRegister.setCreatedUser(userId);
         	roleRegister.setCreatedDate(createdDate);
 			roleService.save(roleRegister);
+			//boolean mesg = true;
+			model.addFlashAttribute("reg", true);
 			return "redirect:/role";
 		}
 
@@ -59,10 +68,10 @@ public class RoleController {
 
 	@PostMapping("/roleEdit/{id}")
 	public String customerUpdate(@ModelAttribute("roleEdit") @Valid Role role, BindingResult result,
-			@PathVariable("id") int id, Model model) {
+			@PathVariable("id") int id, RedirectAttributes  model) {
 		if (result.hasErrors()) {
-			model.addAttribute("roleEdit", role);
-			return "mfi/user/MFI_CRM_03";
+			model.addFlashAttribute("roleEdit", role);
+			return "mfi/user/MFI_ROL_03";
 		}
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
@@ -77,7 +86,8 @@ public class RoleController {
         	roleRegister.setCreatedDate(role.getCreatedDate());
         	roleRegister.setUpdatedUser(userId);
         	roleRegister.setUpdatedDate(updatedDate);
-		
+        	
+		model.addFlashAttribute("edit",true );
 		roleService.update(roleRegister);
 		return "redirect:/role";
 	}
