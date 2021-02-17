@@ -2,8 +2,11 @@ package com.mfi.controller;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.mfi.formmodel.LoanInfoForm;
 import com.mfi.model.COA;
 import com.mfi.model.CurrentAccount;
+import com.mfi.model.LoanAccount;
 import com.mfi.model.LoanInfo;
 import com.mfi.model.SavingAccount;
 import com.mfi.model.Transaction;
 import com.mfi.service.CoaAccountService;
 import com.mfi.service.CurrentAccountService;
 import com.mfi.service.DisbursementService;
+import com.mfi.service.LoanAccountService;
 import com.mfi.service.LoanInfoService;
+import com.mfi.service.MyUserDetails;
 import com.mfi.service.SavingAccountService;
 import com.mfi.service.TransactionService;
 
@@ -36,11 +42,89 @@ public class DisbursementController {
 	CoaAccountService coaService;
 	@Autowired
 	private SavingAccountService savingService;
+	@Autowired
+	private LoanAccountService loanAccountService;
 	
 	@RequestMapping("/addDisbursement/{id}")
 	public String disbursement(@PathVariable("id")int id,Model model) {
 		LocalDate now = LocalDate.now();
 		Date date = Date.valueOf(now);
+		
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
+		int userId = currentPrincipalName.getUserId();
+		
+		LoanInfo loanList = loanService.selectOne(id);
+
+//		Current Account Create
+//		Double balance = loanList.getLoanAmount() - 1000;
+	CurrentAccount current = new CurrentAccount();
+	current.setCustomer(loanList.getCustomer());
+	current.setAccountStatus(true);
+	current.setBalance(0.0);
+
+	List<CurrentAccount> currentList = currentService.selectAll();
+	if (currentList.isEmpty()) {
+		current.setCurrentAccountNumber("1101000011110001");
+	} else {
+		int i = currentList.size();
+		int gid = i + 1;
+		String number = String.format("110100001111%04d", gid);
+		current.setCurrentAccountNumber(number);
+	}
+
+	current.setCreatedDate(date);
+	current.setCreatedUser(userId);
+	currentService.save(current);
+
+//		saving account create 
+	SavingAccount saving = new SavingAccount();
+	saving.setCustomer(loanList.getCustomer());
+	saving.setAccountStatus(true);
+	saving.setBalance(0.0);
+
+	List<SavingAccount> savingList = savingService.selectAll();
+	if (savingList.isEmpty()) {
+		saving.setSavingAccountNumber("1102000011110001");
+	} else {
+		int i = savingList.size();
+		int gid = i + 1;
+		String number = String.format("110200001111%04d", gid);
+		saving.setSavingAccountNumber(number);
+	}
+	saving.setCreatedDate(date);
+	saving.setCreatedUser(userId);
+	savingService.save(saving);
+
+//		loan account create
+	SavingAccount savingAccNumber = savingService.getSavingAccount(loanList.getCustomer().getCustomerCode());
+	CurrentAccount currentAccNumber = currentService.getCurrentAccount(loanList.getCustomer().getCustomerCode());
+	System.out.println(savingAccNumber.getCustomer().getCustomerCode());
+	LoanAccount loan = new LoanAccount();
+	loan.setLoanAmount(loanList.getLoanAmount());
+	loan.setAccountStatus(true);
+	loan.setCustomer(loanList.getCustomer());
+	loan.setSavingAccount(savingAccNumber);
+	loan.setCurrentAccount(currentAccNumber);
+	loan.setLoanInfo(loanList);
+	List<LoanAccount> list = loanAccountService.selectAll();
+	if (list.isEmpty()) {
+		loan.setLoanAccountNumber("1103000011110001");
+	} else {
+		int i = list.size();
+		int gid = i + 1;
+		String number = String.format("110300001111%04d", gid);
+		loan.setLoanAccountNumber(number);
+	}
+	loan.setCreatedDate(date);
+	loan.setCreatedUser(userId);
+	loanAccountService.save(loan);
+
+		
+		
+		
+		
 		
 		LoanInfo loanInfo = loanService.selectOne(id);
 		String customerCode = loanInfo.getCustomer().getCustomerCode();
@@ -98,7 +182,7 @@ public class DisbursementController {
 		bankTran.setCreatedDate(date);
 		transactionService.bankTran(bankTran);
 		
-		loanInfo.setStatus("Disbursement");
+		loanInfo.setStatus("Progress");
 		loanInfo.setUpdateDate(now);
 		loanService.save(loanInfo);
 		return "redirect:/disbursement";

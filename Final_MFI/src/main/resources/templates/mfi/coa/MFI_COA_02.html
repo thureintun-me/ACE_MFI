@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <!-- Required meta tags -->
 <meta charset="utf-8">
@@ -58,8 +57,8 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 												<button class="btn btn-sm btn-gradient-primary"
 													type="button">Search</button>
 											</div>
-											<div class="col-sm-2  " sec:authorize="hasAnyAuthority('MASTER')">
-												<a href="/addCao" class="btn btn-gradient-info"
+											<div class="col-sm-2  ">
+												<a href="MFI_COA_01.html" class="btn btn-gradient-info"
 													style="height: 46px;">Add</a>
 
 
@@ -90,7 +89,7 @@ xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 												<td th:text="${coa.bankId}"></td>
 												<td th:text="${coa.glType}"></td>
 												<td th:text="${coa.accountNumber}"></td>
-												<td th:text="${coa.amount}"></td>
+												<td th:text="${#numbers.formatDecimal(coa.amount,0,3)}"></td>
 												<td th:text="${coa.createdUser}"></td>
 												<td th:text="${coa.createdDate}"></td>
 												<td th:text="${coa.updateUser}"></td>

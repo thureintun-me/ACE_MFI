@@ -1,6 +1,7 @@
 package com.mfi.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,8 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.mfi.model.BlackList;
 import com.mfi.model.Customer;
 import com.mfi.service.BlackListService;
+import com.mfi.service.MyUserDetails;
 
 @Controller
 public class BlackListController {
@@ -47,12 +51,13 @@ public class BlackListController {
 			}
 		}
 
-		int createdUser = 1;
-		int updatedUser = 0;
-		Date createdDate = new Date(1);
-		Date updatedDate = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
+		int userId = currentPrincipalName.getUserId();
+		 LocalDate now = LocalDate.now();
+			Date createDate = Date.valueOf(now);
 		bkService.saveBk(blacklist.getName(), blacklist.getNrc(), blacklist.getAddress(), blacklist.getFatherName(),
-				createdUser, createdDate, updatedUser, updatedDate, blacklist.getRemark());
+				userId, createDate, 0, null, blacklist.getRemark());
 		model.addAttribute("reg", true);
 		return "mfi/blacklist/MFI_BLT_02";
 
@@ -116,9 +121,11 @@ public class BlackListController {
 			return "mfi/blacklist/MFI_BLT_01";
 		}
 		
-		int updatedUser = 0;
-		//Date createdDate = (Date) bl.getCreatedDate();
-		Date updatedDate = new Date(1);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
+		int userId = currentPrincipalName.getUserId();
+		 LocalDate now = LocalDate.now();
+			Date updateDate = Date.valueOf(now);
 		BlackList blOne=bkService.selectOneBk(id);
 		blOne.setName(bl.getName());
 		blOne.setNrc(bl.getNrc());
@@ -126,8 +133,8 @@ public class BlackListController {
 		blOne.setFatherName(bl.getFatherName());
 		blOne.setCreatedDate(bl.getCreatedDate());
 		blOne.setCreatedDate(bl.getCreatedDate());
-		blOne.setUpdateUser(updatedUser);
-		blOne.setUpdateDate(updatedDate);
+		blOne.setUpdateUser(userId);
+		blOne.setUpdateDate(updateDate);
 		bkService.updateBk(blOne);
 		/*
 		 * bkService.saveBk(bl.getName(), bl.getNrc(), bl.getAddress(),

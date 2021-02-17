@@ -18,4 +18,7 @@ public interface LoanAccountRepository extends JpaRepository<LoanAccount, String
 	
 	@Query("select l from LoanAccount l where l.loanAccountNumber=?1") 
 	LoanAccount getAccountNumber(String code);
+	
+	@Query("select lc from LoanAccount lc where lc.customer.customerCode=?1") 
+	 LoanAccount findbyCode(String code);
 }

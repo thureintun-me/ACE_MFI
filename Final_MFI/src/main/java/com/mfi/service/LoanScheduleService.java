@@ -82,6 +82,9 @@ public class LoanScheduleService {
 		loanScheduleRep.deleteLoanSchedule(loaninfo);
 	}
 	
+	public List<LoanSchedule> findbyLoanId(Integer loaninfoid) {
+		return loanScheduleRep.getByLoanScheduleByloanId(loaninfoid);
+	}
 }
 
 

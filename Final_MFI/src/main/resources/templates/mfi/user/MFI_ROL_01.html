@@ -46,12 +46,12 @@
                   </div>
                    <div th:if="${reg}">
                             <div class="alert alert-info">
-                               Role Register Successfully
+                                Register Successfully
                             </div>
                         </div>
                     <div th:if="${edit}">
                             <div class="alert alert-info">
-                               Role Edit Successfully
+                                Update Successfully
                             </div>
                         </div>
                   <form class="forms-sample" th:action="@{/roleregister}" method="post" th:object="${roleBean}">

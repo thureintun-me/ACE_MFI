@@ -18,4 +18,6 @@ public interface LoanScheduleRepository extends JpaRepository<LoanSchedule, Inte
 	 @Query("delete from LoanSchedule ls where ls.loanInfo.LoanInfoId=?1")
 	 public void deleteLoanSchedule(Integer loanInfo);
 
+	 @Query("select ls from LoanSchedule ls where ls.loanInfo.LoanInfoId = ?1")
+	 public List<LoanSchedule> getByLoanScheduleByloanId(Integer loanId);
 }

@@ -72,7 +72,7 @@
                     <img src="../../assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
                     <h3 class="font-weight-normal mb-3">Loan Total <i class="mdi mdi-currency-usd mdi-24px float-right"></i>
                     </h3>
-                    <h4 class="mb-5" th:text="${totalLoan}"> 1,500,000</h4>
+                    <h4 class="mb-5" th:text="${#numbers.formatDecimal(totalLoan,0,3)}"> 1,500,000</h4>
                     <h6 class="card-text"></h6>
                   </div>
                 </div>

@@ -32,4 +32,8 @@ public class LoanAccountService {
 	public void update(LoanAccount loanAccount) {
 		repo.save(loanAccount);
 	}
+	
+	public LoanAccount getLoanAccount(String code) {
+		return repo.findbyCode(code);
+	}
 }

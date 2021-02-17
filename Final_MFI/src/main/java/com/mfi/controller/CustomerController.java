@@ -119,11 +119,7 @@ public class CustomerController {
 		}
 		@GetMapping("/customerEdit/{id}")
 		public String customerEdit(@PathVariable("id")String id,Model model) {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
-			int userId = currentPrincipalName.getUserId();
-			 LocalDate now = LocalDate.now();
-				Date updatedDate = Date.valueOf(now);
+			
 			Customer c1=crmService.selectOne(id);
 			
 			//DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
@@ -143,8 +139,8 @@ public class CustomerController {
 			crmEdit.setMonthlyIncome(c1.getMonthlyIncome());
 			crmEdit.setCreatedUser(c1.getCreatedUser());
 			crmEdit.setCreatedDate(c1.getCreatedDate());
-			crmEdit.setUpdateUser(userId);
-			crmEdit.setUpdateDate(updatedDate);
+			crmEdit.setUpdateUser(c1.getUpdateUser());
+			crmEdit.setUpdateDate(c1.getUpdateDate());
 			model.addAttribute("crmEdit", crmEdit);
 			return "mfi/customer/MFI_CRM_03";
 		}
@@ -154,10 +150,14 @@ public class CustomerController {
 				model.addAttribute("crmEdit", crm);
 				return "mfi/customer/MFI_CRM_03";
 			}
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
+			int userId = currentPrincipalName.getUserId();
+			 LocalDate now = LocalDate.now();
+				Date updatedDate = Date.valueOf(now);
 			Date dob=Date.valueOf(crm.getDob());
 			
-			LocalDate now = LocalDate.now();
-			Date updatedDate = Date.valueOf(now);
+			
 			
 			Customer customer=crmService.selectOne(id);
 			customer.setName(crm.getName());
@@ -171,9 +171,9 @@ public class CustomerController {
 			customer.setPositon(crm.getPositon());
 			customer.setCompanyName(crm.getCompanyName());
 			customer.setMonthlyIncome(crm.getMonthlyIncome());
-			customer.setCreatedUser(1);
+			customer.setCreatedUser(crm.getCreatedUser());
 			customer.setCreatedDate(crm.getCreatedDate());
-			customer.setUpdateUser(1);
+			customer.setUpdateUser(userId);
 			customer.setUpdateDate(updatedDate);
 			crmService.update(customer);
 			redirectAttrs.addFlashAttribute("edit", true);

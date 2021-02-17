@@ -14,7 +14,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,7 @@ import com.mfi.service.CurrentAccountService;
 import com.mfi.service.LoanAccountService;
 import com.mfi.service.LoanInfoService;
 import com.mfi.service.LoanScheduleService;
+import com.mfi.service.MyUserDetails;
 import com.mfi.service.SavingAccountService;
 
 @Controller
@@ -57,40 +59,37 @@ public class LoanController {
 	LoanScheduleService loanScheduleservice;
 
 	@RequestMapping("/searchCRM")
-	public String searchCustomer(Model model,
-			@RequestParam(name = "crmSearch", required = false) String crmSearch) {
+	public String searchCustomer(Model model, @RequestParam(name = "crmSearch", required = false) String crmSearch) {
 		List<Customer> customers = new ArrayList<>();
 		customers = loanservice.searchCustomer(crmSearch);
 		model.addAttribute("customerList", customers);
 		model.addAttribute("crmSearch", crmSearch);
-		if(customers.isEmpty()) {
+		if (customers.isEmpty()) {
 			model.addAttribute("notfound", true);
 			return "mfi/loan/MFI_LON_01";
 		}
-				return "mfi/loan/MFI_LON_01";
+		return "mfi/loan/MFI_LON_01";
 	}
 
 	// LoanInfoSearching
 	@RequestMapping("/searchloanInfo")
-	public String searchloanInfo(Model model,
-			@RequestParam(name = "loanSearch", required = false) String loanSearch) {
-		
-		if(loanSearch != null) {
+	public String searchloanInfo(Model model, @RequestParam(name = "loanSearch", required = false) String loanSearch) {
+
+		if (loanSearch != null) {
 			List<LoanInfo> loanInfo = new ArrayList<>();
-			
-			
+
 			loanInfo = loanservice.getLoanInfo(loanSearch);
-			if(loanInfo.size()==0) {
-				model.addAttribute("notfound",true);
-				
+			if (loanInfo.size() == 0) {
+				model.addAttribute("notfound", true);
+
 			}
 			model.addAttribute("loanInfolist", loanInfo);
-			model.addAttribute("loanSearch", loanSearch);	
+			model.addAttribute("loanSearch", loanSearch);
 			return "mfi/loan/MFI_LON_02";
-		}else {
+		} else {
 			return "mfi/loan/MFI_LON_02";
 		}
-		
+
 	}
 
 	@RequestMapping("/caculateCreditScore/{id}")
@@ -147,19 +146,25 @@ public class LoanController {
 
 	@PostMapping("/addLoanInfo")
 	public String addLoanInfo(@Valid @ModelAttribute("loanInfoForm") LoanInfoForm loanInfoForm,
-			BindingResult bindingResult, Model model,RedirectAttributes redirectAttrs) {
+			BindingResult bindingResult, Model model, RedirectAttributes redirectAttrs) {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("loanInfoForm", loanInfoForm);
 			return "mfi/loan/MFI_LON_01_01";
 		}
 		String customercode = loanInfoForm.getCustomerCode();
-		System.out.println("testing" + customercode);
+		
 		List<LoanInfo> loaninfo = loanservice.getLoanInfobyCrmCode(customercode);
 		System.out.println("loanINfo is " + loaninfo);
-		if (loaninfo.size() ==0 ) {
-			int createdUser = 1;
-			int updatedUser = 0;
+		if (loaninfo.size() == 0) {
+			/*
+			 * int createdUser = 1; int updatedUser = 0;
+			 */
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
+			int userId = currentPrincipalName.getUserId();
+			LocalDate now = LocalDate.now();
+			
 			LocalDate createdDate = LocalDate.now();
 			LocalDate updatedDate = null;
 			Date Rdate = Date.valueOf(loanInfoForm.getRegisterDate());
@@ -167,7 +172,7 @@ public class LoanController {
 			Customer customer = loanservice.searchCrmByCode(loanInfoForm.getCustomerCode());
 			LoanInfo loanInfo = loanservice.addLoanInfo(customer, loanInfoForm.getLoanAmount(), Rdate,
 					loanInfoForm.getLoanTermYear(), interstRate, loanInfoForm.getDescription(),
-					loanInfoForm.getCreditScore(), "Pending", createdUser, createdDate, updatedUser, updatedDate);
+					loanInfoForm.getCreditScore(), "Pending", userId, createdDate, 0, updatedDate);
 			Integer loanId = loanInfo.getLoanInfoId();
 			LoanInfo loan = loanservice.getLoanInfobyId(loanId);
 			int months = loan.getLoanTermYear() * 12;
@@ -189,26 +194,30 @@ public class LoanController {
 				newBalance = Double.parseDouble(df2.format(balance - amountPaid));
 
 				loanScheduleservice.addLoanScheduleForm(payment_tern_no, futureRegisterDate, balance, null,
-						monthlyPayment, irPaid, null, newBalance, "active", createdUser, createdDate, updatedUser,
+						monthlyPayment, irPaid, null, newBalance, "active", userId, createdDate, 0,
 						updatedDate, loan, amountPaid);
 				balance = newBalance;
 				registerDate = futureRegisterDate.plusMonths(1);
 			}
-			
+
 			redirectAttrs.addFlashAttribute("reg", true);
 			return "redirect:/searchloanInfo";
 		} else {
-			
-			for(LoanInfo loanInfos:loaninfo) {
-				
-				if(loanInfos.getStatus().matches("Progress") || loanInfos.getStatus().matches("Pending") || loanInfos.getStatus().matches("Approved")) {
-					model.addAttribute("errorMessage", "This Customer is in progress");
+
+			for (LoanInfo loanInfos : loaninfo) {
+
+				if (loanInfos.getStatus().matches("Progress") || loanInfos.getStatus().matches("Pending")
+						|| loanInfos.getStatus().matches("Approve")) {
+					model.addAttribute("progress", true);
 					return "mfi/loan/MFI_LON_01_01";
-				}		
+				}
 			}
 
-			int createdUser = 1;
-			int updatedUser = 0;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
+			int userId = currentPrincipalName.getUserId();
+			LocalDate now = LocalDate.now();
+			
 			LocalDate createdDate = LocalDate.now();
 			LocalDate updatedDate = null;
 			Date Rdate = Date.valueOf(loanInfoForm.getRegisterDate());
@@ -216,7 +225,7 @@ public class LoanController {
 			Customer customer = loanservice.searchCrmByCode(loanInfoForm.getCustomerCode());
 			LoanInfo loanInfo = loanservice.addLoanInfo(customer, loanInfoForm.getLoanAmount(), Rdate,
 					loanInfoForm.getLoanTermYear(), interstRate, loanInfoForm.getDescription(),
-					loanInfoForm.getCreditScore(), "Pending", createdUser, createdDate, updatedUser, updatedDate);
+					loanInfoForm.getCreditScore(), "Pending", userId, createdDate, 0, updatedDate);
 			Integer loanId = loanInfo.getLoanInfoId();
 			LoanInfo loan = loanservice.getLoanInfobyId(loanId);
 			int months = loan.getLoanTermYear() * 12;
@@ -238,7 +247,7 @@ public class LoanController {
 				newBalance = Double.parseDouble(df2.format(balance - amountPaid));
 
 				loanScheduleservice.addLoanScheduleForm(payment_tern_no, futureRegisterDate, balance, null,
-						monthlyPayment, irPaid, null, newBalance, "active", createdUser, createdDate, updatedUser,
+						monthlyPayment, irPaid, null, newBalance, "active", userId, createdDate, 0,
 						updatedDate, loan, amountPaid);
 				balance = newBalance;
 				registerDate = futureRegisterDate.plusMonths(1);
@@ -285,13 +294,17 @@ public class LoanController {
 
 	@PostMapping("/editLoanInfo/{id}")
 	public String editLoanInfoe(@Valid @ModelAttribute("loaninfo") LoanInfoForm loanInfoForm,
-			BindingResult bindingResult, @PathVariable("id") Integer loaninfo_id, Model model,RedirectAttributes redirectAttributes) {
+			BindingResult bindingResult, @PathVariable("id") Integer loaninfo_id, Model model,
+			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("loanInfoForm", loanInfoForm);
 			return "mfi/loan/MFI_LON_03";
 		}
-		int updatedUser = 0;
-		LocalDate updatedDate = LocalDate.now();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		MyUserDetails currentPrincipalName = (MyUserDetails) authentication.getPrincipal();
+		int userId = currentPrincipalName.getUserId();
+		LocalDate now = LocalDate.now();
+		
 		double interstRate = loanInfoForm.getInterestRate() / 100;
 		LoanInfo updateLoanInfo = loanservice.getLoanInfobyId(loaninfo_id);
 		Customer customer = loanservice.searchCrmByCode(loanInfoForm.getCustomerCode());
@@ -303,14 +316,21 @@ public class LoanController {
 		updateLoanInfo.setDescription(loanInfoForm.getDescription());
 		updateLoanInfo.setCreditScore(loanInfoForm.getCreditScore());
 		updateLoanInfo.setStatus(loanInfoForm.getStatus());
-		updateLoanInfo.setCreatedUser(loanInfoForm.getCreatedUser());
-		updateLoanInfo.setCreatedDate(loanInfoForm.getCreatedDate());
-		updateLoanInfo.setUpdateUser(updatedUser);
-		updateLoanInfo.setUpdateDate(updatedDate);
+		
+		
+		/*
+		 * updateLoanInfo.setCreatedUser(loanInfoForm.getCreatedUser());
+		 * updateLoanInfo.setCreatedDate(loanInfoForm.getCreatedDate());
+		 */
+		 
+		updateLoanInfo.setUpdateUser(userId);
+		updateLoanInfo.setUpdateDate(now);
 		LoanInfo loanInfo = loanservice.updateLoanInfo(updateLoanInfo);
 		Integer loanId = loanInfo.getLoanInfoId();
 		LoanInfo loan = loanservice.getLoanInfobyId(loanId);
-		
+		List<LoanSchedule> loanSdule=loanScheduleservice.findbyLoanId(loanId);
+		LocalDate date =loanSdule.get(0).getCreatedDate();
+		int id =loanSdule.get(0).getCreatedUser();
 		loanScheduleservice.deleteLoanschByLoanInfoId(loanId);
 		int months = loan.getLoanTermYear() * 12;
 		double monthlyIR = loan.getInterestRate() / 12;
@@ -331,8 +351,8 @@ public class LoanController {
 			newBalance = Double.parseDouble(df2.format(balance - amountPaid));
 
 			loanScheduleservice.addLoanScheduleForm(payment_tern_no, futureRegisterDate, balance, null, monthlyPayment,
-					irPaid, null, newBalance, "active", loan.getCreatedUser(), loan.getCreatedDate(), updatedUser,
-					updatedDate, loan, amountPaid);
+					irPaid, null, newBalance, "active", id, date, userId,
+					now, loan, amountPaid);
 			balance = newBalance;
 			registerDate = futureRegisterDate.plusMonths(1);
 		}
@@ -364,71 +384,21 @@ public class LoanController {
 		Date date = Date.valueOf(now);
 		LoanInfo loanList = loanservice.selectOne(id);
 
-//			Current Account Create
-//			Double balance = loanList.getLoanAmount() - 1000;
-		CurrentAccount current = new CurrentAccount();
-		current.setCustomer(loanList.getCustomer());
-		current.setAccountStatus(true);
-		current.setBalance(0.0);
-
-		List<CurrentAccount> currentList = currentService.selectAll();
-		if (currentList.isEmpty()) {
-			current.setCurrentAccountNumber("1101000011110001");
-		} else {
-			int i = currentList.size();
-			int gid = i + 1;
-			String number = String.format("110100001111%04d", gid);
-			current.setCurrentAccountNumber(number);
-		}
-
-		current.setCreatedDate(date);
-		currentService.save(current);
-
-//			saving account create 
-		SavingAccount saving = new SavingAccount();
-		saving.setCustomer(loanList.getCustomer());
-		saving.setAccountStatus(true);
-		saving.setBalance(0.0);
-
-		List<SavingAccount> savingList = savingService.selectAll();
-		if (savingList.isEmpty()) {
-			saving.setSavingAccountNumber("1102000011110001");
-		} else {
-			int i = savingList.size();
-			int gid = i + 1;
-			String number = String.format("110200001111%04d", gid);
-			saving.setSavingAccountNumber(number);
-		}
-		saving.setCreatedDate(date);
-		savingService.save(saving);
-
-//			loan account create
-		SavingAccount savingAccNumber = savingService.getSavingAccount(loanList.getCustomer().getCustomerCode());
-		CurrentAccount currentAccNumber = currentService.getCurrentAccount(loanList.getCustomer().getCustomerCode());
-		System.out.println(savingAccNumber.getCustomer().getCustomerCode());
-		LoanAccount loan = new LoanAccount();
-		loan.setLoanAmount(loanList.getLoanAmount());
-		loan.setAccountStatus(true);
-		loan.setCustomer(loanList.getCustomer());
-		loan.setSavingAccount(savingAccNumber);
-		loan.setCurrentAccount(currentAccNumber);
-		loan.setLoanInfo(loanList);
-		List<LoanAccount> list = loanAccountService.selectAll();
-		if (list.isEmpty()) {
-			loan.setLoanAccountNumber("1103000011110001");
-		} else {
-			int i = list.size();
-			int gid = i + 1;
-			String number = String.format("110300001111%04d", gid);
-			loan.setLoanAccountNumber(number);
-		}
-		loan.setCreatedDate(date);
-		loanAccountService.save(loan);
-
-		loanList.setStatus("approve");
+		loanList.setStatus("Approve");
 		loanList.setUpdateDate(now);
 		loanservice.save(loanList);
 
+		return "redirect:/checkerLoanList";
+	}
+
+	@RequestMapping("rejectLoan/{id}")
+	public String rejectLoan(@PathVariable("id") int id, Model model) {
+		LocalDate now = LocalDate.now();
+		Date date = Date.valueOf(now);
+		LoanInfo loanList = loanservice.selectOne(id);
+		loanList.setStatus("Reject");
+		loanList.setUpdateDate(now);
+		loanservice.save(loanList);
 		return "redirect:/checkerLoanList";
 	}
 

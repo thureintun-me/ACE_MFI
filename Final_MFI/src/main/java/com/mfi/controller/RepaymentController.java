@@ -42,7 +42,7 @@ public class RepaymentController {
 	List<LoanSchedule> LoanSchdule = repaymentService.selectByDueDate(now,"active");
 	model.addAttribute("loanSchdule",LoanSchdule);
 	model.addAttribute("localDate",LocalDate.now());
-		return "mfi/transaction/MFI_RPM_02";
+		return "transaction/MFI_RPM_02";
 	}
 	
 	@RequestMapping("/payment")
@@ -61,8 +61,9 @@ public class RepaymentController {
 			Double repaymentAmount = loanSchdule.getTotalRepaymentAmount();
 			Double principal = loanSchdule.getPrincipal();
 			Double interest = loanSchdule.getInterestRate();
-			
-			CurrentAccount account = loanSchdule.getLoanInfo().getCustomer().getCurrentAccount();
+			String customerCode=loanSchdule.getLoanInfo().getCustomer().getCustomerCode(); //zz
+			CurrentAccount account=currentAccountService.getCurrentAccount(customerCode); //zz
+			//CurrentAccount account = loanSchdule.getLoanInfo().getCustomer().getCurrentAccount(); //yinmat
 			
 			if(repaymentAmount < account.getBalance() && repaymentDate.equals(now))
 			{
@@ -86,7 +87,8 @@ public class RepaymentController {
 				repaymentService.loanSchduleUpdate(loanSchdule);
 				
 				//loan acc & loan info update
-				LoanAccount loanAccount = loanSchdule.getLoanInfo().getCustomer().getLoanAccount();
+				LoanAccount loanAccount=loanAccountService.getLoanAccount(customerCode); //zz
+			//LoanAccount loanAccount = loanSchdule.getLoanInfo().getCustomer().getLoanAccount(); // yin myat
 				loanAccount.setLoanAmount(loanAccount.getLoanAmount()-principal);
 				loanAccount.setUpdateDate(date);
 				loanAccountService.save(loanAccount);
@@ -102,7 +104,7 @@ public class RepaymentController {
 				}
 				//current transaction
 				Transaction currentTransaction = new Transaction();
-				currentTransaction.setTransactionType("Withdraw");
+				currentTransaction.setTransactionType("Current");
 				currentTransaction.setAccountName(loanSchdule.getLoanInfo().getCustomer().getName());
 				currentTransaction.setCoaId(5);
 				currentTransaction.setAccountNumber(account.getCurrentAccountNumber());
@@ -169,7 +171,8 @@ public class RepaymentController {
 				repaymentService.loanSchduleUpdate(loanSchdule);
 				
 				//loan acc & loan info update
-				LoanAccount loanAccount = loanSchdule.getLoanInfo().getCustomer().getLoanAccount();
+				LoanAccount loanAccount=loanAccountService.getLoanAccount(customerCode); //zz
+			//LoanAccount loanAccount = loanSchdule.getLoanInfo().getCustomer().getLoanAccount(); //yin myat
 				loanAccount.setLoanAmount(loanAccount.getLoanAmount()-principal);
 				loanAccountService.save(loanAccount);
 				if(loanAccount.getLoanAmount() == 0) {
@@ -226,6 +229,6 @@ public class RepaymentController {
 		List<LoanSchedule> completeLoan = repaymentService.completeLoan(now, "Complete");
 		model.addAttribute("loanSchdule",completeLoan);
 		model.addAttribute("localDate",LocalDate.now());
-		return "mfi/transaction/MFI_RPM_02";
+		return "transaction/MFI_RPM_02";
 	}
 }	

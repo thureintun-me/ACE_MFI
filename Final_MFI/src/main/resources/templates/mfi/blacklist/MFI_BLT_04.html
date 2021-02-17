@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="../../assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="../../assets/images/favicon.ico" />
+   
 </head>
   <body>
     <div class="container-scroller">
@@ -90,7 +91,7 @@
                             <div class="col-sm-7">
       
                               <!-- <a th:href="@{deleteBlacklist/{id}(id=${blacklists.blackListId})}" class="btn btn-gradient-danger mr-2" >Delete</a> -->
-                              <a  class="btn btn-gradient-primary mr-2" th:href="@{/deleteBlackList/{id}(id=${viewDetail.blackListId})}">
+                              <a  class="btn btn-gradient-primary mr-2" th:href="@{/deleteBlackList/{id}(id=${viewDetail.blackListId})}" onclick="return window.confirm('Are you sure?')">
                               Delete</a>
                               <a  th:href="@{/searchBlackList}" class="btn btn-secondary" >Back</a>
                             </div>
@@ -103,18 +104,26 @@
             </div>
             
           </div>
-        </div>
           <!-- content-wrapper ends -->
+          <footer th:replace="/fragment/footer.html::footer"></footer>
+        </div>
+        
+         <!-- main-panel ends -->
+          
           <!-- partial:../../partials/_footer.html -->
-         <footer th:replace="/fragment/footer.html::footer"></footer>
+         
 
           <!-- partial -->
+        
         </div>
-        <!-- main-panel ends -->
+        <!-- page-body-wrapper ends -->
+       
+         
       </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
+       <!-- container-scroller -->
+      
+   
+    
     <!-- plugins:js -->
     <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->

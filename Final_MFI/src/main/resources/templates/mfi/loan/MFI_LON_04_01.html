@@ -141,7 +141,7 @@
                       <div class="form-group row">       
                       <div class="col-sm-7">
                        <a th:href="@{/approveLoan/{id}(id=${loaninfo.LoanInfoId})}" class="btn btn-gradient-success mr-2" >APPROVED</a>
-                         <a th:href="@{/checkerLoanList}" class="btn btn-gradient-danger mr-2" >REJECTED</a>
+                         <a th:href="@{/rejectLoan/{id}(id=${loaninfo.LoanInfoId})}" class="btn btn-gradient-danger mr-2" >REJECTED</a>
                          <a th:href="@{/checkerLoanList}" class="btn btn-secondary" >BACK</a>
                          
                      

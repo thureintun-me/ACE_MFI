@@ -62,7 +62,7 @@ public class DashboardController {
 
 	@RequestMapping("/checker")
 	public String checkerDashboard(Model model) {
-		String status = "pending";
+		String status = "Pending";
 		List<LoanInfo> loanList = loanInfoService.selectSatus(status);
 		int pendingloanList = loanList.size();
 		// customer
@@ -92,7 +92,7 @@ public class DashboardController {
 
 	@RequestMapping("/maker")
 	public String makerDashboard(Model model) {
-		String status = "progress";
+		String status = "Progress";
 		List<LoanInfo> loanList = loanInfoService.selectSatus(status);
 		int progressloanList = loanList.size();
 		model.addAttribute("progressloanList", progressloanList);
@@ -187,7 +187,7 @@ public class DashboardController {
 
 	@RequestMapping("/disbursement")
 	public String disbursement(Model model) {
-		String status = "approve";
+		String status = "Approve";
 		model.addAttribute("disList", disService.selectDisbursement(status));
 		return "mfi/transaction/MFI_DIS_01";
 	}
